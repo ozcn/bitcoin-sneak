@@ -110,6 +110,10 @@ class Database(object):
             'CREATE INDEX txio_ix_addr_address_incoming ON ' +
             'txio (addr_address, incoming)'
         )
+        cur.execute(
+            'CREATE INDEX addr_ix_wallet_id ON ' +
+            'addr (wallet_id)'
+        )
         cur.executemany(
             'INSERT INTO metadata (key, value) VALUES (?, ?)',
             (('schema_version', self.schema_version),
