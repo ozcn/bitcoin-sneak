@@ -59,6 +59,13 @@ class BitcoindConnection(object):
         return res
 
 
+class Transaction(object):
+    def __init__(self, txid, ts, incoming, outgoing):
+        super(Transaction, self).__init__()
+        self.txid = txid
+        self.ts = ts
+        self.incoming =
+
 class Database(object):
     @property
     def schema_version(self):
@@ -94,6 +101,17 @@ class Database(object):
             'CREATE TABLE tx (' +
             'id TEXT PRIMARY KEY, ' +
             'ts INTEGER' +
+            ')'
+        )
+        cur.execute(
+            'CREATE TABLE txtx (' +
+            'tx_id_from TEXT, ' +
+            'tx_id_to TEXT, ' +
+            'n int, ' +
+            'addr_address TEXT, ' +
+            'amount int, ' +
+            'constraint txtx_pkey ' +
+            'PRIMARY KEY (tx_id_from, tx_id_to, n)'
             ')'
         )
         cur.execute(
@@ -179,6 +197,26 @@ class Database(object):
         if commit:
             self.connection.commit()
 
+    def save_txtx(self, tx_id_from, tx_id_to, n, addr_address,
+                  amount, cur=None, commit=False):
+        if cur is None:
+            cur = self.connection.cursor()
+        if cur.execute(
+                        'SELECT * FROM txtx WHERE ' +
+                        'tx_id_from=? and tx_id_to=? and n=?',
+                        (tx_id_from, tx_id_to, n)).fetchone() is not None:
+            cur.execute('UPDATE txtx SET addr_address=?, amount=? WHERE ' +
+                        'tx_id_from=? and tx_id_to=? and n=?',
+                        (addr_address, amount, tx_id_from, tx_id_to, n))
+        else:
+            cur.execute(
+                'INSERT INTO txtx ' +
+                '(tx_id_from, tx_id_to, n, addr_address, amount) ' +
+                'VALUES (?, ?, ?, ?, ?)',
+                (tx_id_from, tx_id_to, n, addr_address, amount))
+        if commit:
+            self.connection.commit()
+
     def save_txio(self, txid, address, incoming, value,
                   cur=None, commit=False):
         if cur is None:
@@ -207,6 +245,8 @@ class Database(object):
             cur = self.connection.cursor()
         wallets = []
         addresses = []
+        for d in txinfo['txtx']:
+            self.save_txtx(**d, cur=cur)
         for d in txinfo['incoming']:
             addr_data = cur.execute(
                 'SELECT wallet_id FROM addr WHERE address=?',

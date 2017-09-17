@@ -39,6 +39,7 @@ def tidy_txinfo(data):
     res['ts'] = data['time']
     incoming = {}
     outgoing = {}
+    txtx = []
     for d in data['vin']:
         if 'prev_out' not in d:
             continue
@@ -46,6 +47,10 @@ def tidy_txinfo(data):
         if addr not in incoming:
             incoming[addr] = 0
         incoming[addr] += d['prev_out']['value']
+        txtx.append({
+            'address': addr, 'tx_id_from': d['txid'], 'tx_id_to': data['txid'],
+            'amount': d['prev_out']['value'], 'n': d['vout']
+        })
     for d in data['vout']:
         if d['value'] != 0:
             addr = ' '.join(d['scriptPubKey']['addresses'])
@@ -58,4 +63,5 @@ def tidy_txinfo(data):
     res['outgoing'] = [
         {'address': k, 'value': v} for (k, v) in outgoing.items()
     ]
+    res['txtx'] = txtx
     return res
