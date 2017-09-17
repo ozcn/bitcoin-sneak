@@ -59,13 +59,6 @@ class BitcoindConnection(object):
         return res
 
 
-class Transaction(object):
-    def __init__(self, txid, ts, incoming, outgoing):
-        super(Transaction, self).__init__()
-        self.txid = txid
-        self.ts = ts
-        self.incoming =
-
 class Database(object):
     @property
     def schema_version(self):
