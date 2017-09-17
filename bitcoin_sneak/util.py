@@ -48,8 +48,9 @@ def tidy_txinfo(data):
             incoming[addr] = 0
         incoming[addr] += d['prev_out']['value']
         txtx.append({
-            'address': addr, 'tx_id_from': d['txid'], 'tx_id_to': data['txid'],
-            'amount': d['prev_out']['value'], 'n': d['vout']
+            'addr_address': addr, 'tx_id_from': d['txid'],
+            'tx_id_to': data['txid'], 'amount': d['prev_out']['value'],
+            'n': d['vout']
         })
     for d in data['vout']:
         if d['value'] != 0:

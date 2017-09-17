@@ -239,7 +239,8 @@ class Database(object):
         wallets = []
         addresses = []
         for d in txinfo['txtx']:
-            self.save_txtx(**d, cur=cur)
+            self.save_txtx(d['tx_id_from'], d['tx_id_to'], d['n'],
+                           d['addr_address'], d['amount'], cur=cur)
         for d in txinfo['incoming']:
             addr_data = cur.execute(
                 'SELECT wallet_id FROM addr WHERE address=?',
