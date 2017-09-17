@@ -100,7 +100,7 @@ class Database(object):
             'CREATE TABLE txio (' +
             'tx_id TEXT NOT NULL REFERENCES tx(id), ' +
             'addr_address TEXT NOT NULL REFERENCES addr(address), ' +
-            'incoming INTEGER NOT NULL,' +
+            'incoming INTEGER NOT NULL, ' +
             'value INTEGER, ' +
             'constraint txio_pkey ' +
             'PRIMARY KEY (tx_id, addr_address, incoming)'
