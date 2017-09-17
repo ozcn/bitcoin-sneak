@@ -223,9 +223,9 @@ class Database(object):
                 addresses.append(d['address'])
         if len(wallets) == 0:
             wid = util.gen_id()
+            self.save_wallet(wid, cur=cur)
         else:
             wid = wallets[0]
-            self.save_wallet(wid, cur=cur)
         for addr in addresses:
             self.save_addr(addr, wid, cur=cur)
         for d in txinfo['outgoing']:
