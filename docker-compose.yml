@@ -4,9 +4,9 @@ services:
   db:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD: ${DB_PASSWORD}
-      - POSTGRES_USER: ${DB_USER}
-      - POSTGRES_DB: 'bitcoin_sneak'
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=bitcoin_sneak
     volumes:
       - sneakdb:/var/lib/postgresql/data
 
