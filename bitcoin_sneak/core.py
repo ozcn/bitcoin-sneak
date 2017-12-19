@@ -4,7 +4,7 @@ from contextlib import closing
 from future.moves.urllib import request
 import json
 import codecs
-import sqlite3
+import psycopg2
 
 from . import util
 
@@ -66,10 +66,10 @@ class Database(object):
 
     def __init__(self, connection):
         super(Database, self).__init__()
-        if isinstance(connection, sqlite3.Connection):
+        if isinstance(connection, psycopg2.connection):
             self.connection = connection
         else:
-            self.connection = sqlite3.Connection(connection)
+            self.connection = psycopg2.connect(connection)
         if not self.is_init():
             self.__init_tables()
 
