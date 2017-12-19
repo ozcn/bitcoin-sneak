@@ -2,13 +2,20 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: 'postgres:9.6-alpine'
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_DB=bitcoin_sneak
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=bitcoinsneak
     volumes:
       - sneakdb:/var/lib/postgresql/data
+  app:
+    build: .
+    links:
+      - db
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
 
 volumes:
   sneakdb:
